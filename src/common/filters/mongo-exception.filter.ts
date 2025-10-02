@@ -11,11 +11,28 @@ export class MongoExceptionFilter implements ExceptionFilter {
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Internal server error';
 
-    if (exception.code === 11000) {
-      status = HttpStatus.CONFLICT;
-      const field = Object.keys(exception.keyPattern)[0];
-      const value = exception.keyValue[field];
-      message = `${field} '${value}' already exists`;
+    switch (exception.code) {
+      case 11000:
+        status = HttpStatus.CONFLICT;
+        const field = Object.keys(exception.keyPattern)[0];
+        const value = exception.keyValue[field];
+        message = `${field} '${value}' already exists`;
+        break;
+
+      case 121:
+        status = HttpStatus.BAD_REQUEST;
+        message = 'Document failed validation';
+        break;
+
+      case 16755:
+        status = HttpStatus.BAD_REQUEST;
+        message = 'Invalid BSON data';
+        break;
+
+      default:
+        status = HttpStatus.INTERNAL_SERVER_ERROR;
+        message = 'Database operation failed';
+        break;
     }
 
     response.status(status).json({

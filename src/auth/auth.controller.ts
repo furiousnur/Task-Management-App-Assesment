@@ -26,8 +26,7 @@ export class AuthController {
     statusCode: 400
   }))
   async login(@Body() loginDto: LoginDto) {
-    const user = await this.authService.validateUser(loginDto.username, loginDto.password);
-    return user;
+    return await this.authService.validateUser(loginDto.username, loginDto.password);
   }
 
   @Post('register')
@@ -51,7 +50,6 @@ export class AuthController {
     statusCode: 400
   }))
   async register(@Body() registerDto: RegisterDto) {
-    const user = await this.authService.register(registerDto);
-    return user;
+    return await this.authService.register(registerDto);
   }
 }
