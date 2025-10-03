@@ -1,10 +1,11 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, UseFilters } from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus, UseFilters, UseGuards, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { SwaggerResponse } from 'src/common/swagger-response.helper';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { MongoExceptionFilter } from 'src/common/filters/mongo-exception.filter';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 
 @Controller('auth')
 @UseFilters(MongoExceptionFilter)
@@ -51,5 +52,25 @@ export class AuthController {
   }))
   async register(@Body() registerDto: RegisterDto) {
     return await this.authService.register(registerDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('verify-token')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Verify token',
+    description: 'Verify if the provided JWT token is valid'
+  })
+  @ApiResponse(SwaggerResponse.success(
+    'Token verification successful',
+    {
+      statusCode: 200,
+      message: 'Token is valid',
+      data: { valid: true }
+    }
+  ))
+  @ApiResponse(SwaggerResponse.unauthorized())
+  async verifyToken() {
+    return await this.authService.verifyToken();
   }
 }

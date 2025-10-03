@@ -26,10 +26,11 @@ export class TaskController {
   async findAll(
     @Query('status') status?: TaskStatus,
     @Query('assignedUser') assignedUser?: string,
+    @Query('title') title?: string,
     @Query('page') page = 1,
     @Query('limit') limit = 10,
   ) {
-    return this.taskService.findAll(status, assignedUser, page, limit);
+    return this.taskService.findAll(status, assignedUser, title, page, limit);
   }
 
   @Get(':id')

@@ -70,4 +70,12 @@ export class AuthService {
       data: user
     };
   }
+
+  async verifyToken() {
+    return {
+      statusCode: 200,
+      message: 'Token is valid',
+      data: { valid: true }
+    };
+  }
 }

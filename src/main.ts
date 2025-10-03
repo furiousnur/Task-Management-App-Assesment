@@ -27,6 +27,11 @@ async function bootstrap() {
     transform: true,
   }));
 
+  app.enableCors({
+    origin: 'http://localhost:4000',
+    credentials: true,
+  });
+
   await app.listen(process.env.PORT || 3000, '0.0.0.0');
   console.log(`Application is running on: http://localhost:${process.env.PORT || 3000}`);
   console.log(`Swagger is running on: http://localhost:${process.env.PORT || 3000}/api/docs`);

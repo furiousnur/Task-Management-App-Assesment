@@ -33,6 +33,7 @@ export class TaskService {
   async findAll(
     status?: TaskStatus,
     assignedUser?: string,
+    title?: string,
     page: number = 1,
     limit: number = 10
   ) {
@@ -40,6 +41,7 @@ export class TaskService {
 
     if (status) filter.status = status;
     if (assignedUser) filter.assignedUser = assignedUser;
+    if (title) filter.title = title;
 
     const skip = (page - 1) * limit;
 

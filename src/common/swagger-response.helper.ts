@@ -67,7 +67,6 @@ export class SwaggerResponse {
     };
   }
 
-  // Auth-specific responses
   static loginSuccess(): ApiResponseOptions {
     return this.success(
       'Login successful',
@@ -118,7 +117,6 @@ export class SwaggerResponse {
     );
   }
 
-  // Task-specific responses
   static taskCreated(): ApiResponseOptions {
     return this.created(
       'Task created successfully',
