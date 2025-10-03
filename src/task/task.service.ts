@@ -37,11 +37,12 @@ export class TaskService {
     page: number = 1,
     limit: number = 10
   ) {
-    const filter: any = {};
+    const username = this.contextService.getUsername();
+    const filter: any = { assignedUser: username };
 
     if (status) filter.status = status;
     if (assignedUser) filter.assignedUser = assignedUser;
-    if (title) filter.title = title;
+    if (title) filter.title = { $regex: title, $options: 'i' };
 
     const skip = (page - 1) * limit;
 
@@ -68,7 +69,8 @@ export class TaskService {
   }
 
   async findOne(id: string) {
-    const task = await this.taskModel.findById(id).exec();
+    const username = this.contextService.getUsername();
+    const task = await this.taskModel.findOne({ _id: id, assignedUser: username }).exec();
 
     if (!task) {
       throw new NotFoundException(`Task with ID ${id} not found`);
@@ -82,8 +84,13 @@ export class TaskService {
   }
 
   async update(id: string, updateTaskDto: UpdateTaskDto) {
+    const username = this.contextService.getUsername();
     const task = await this.taskModel
-      .findByIdAndUpdate(id, updateTaskDto, { new: true })
+      .findOneAndUpdate(
+        { _id: id, assignedUser: username },
+        updateTaskDto,
+        { new: true }
+      )
       .exec();
 
     if (!task) {
@@ -98,7 +105,10 @@ export class TaskService {
   }
 
   async remove(id: string) {
-    const task = await this.taskModel.findByIdAndDelete(id).exec();
+    const username = this.contextService.getUsername();
+    const task = await this.taskModel
+      .findOneAndDelete({ _id: id, assignedUser: username })
+      .exec();
 
     if (!task) {
       throw new NotFoundException(`Task with ID ${id} not found`);
