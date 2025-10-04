@@ -25,9 +25,13 @@ import { JwtModule } from '@nestjs/jwt';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URI'),
-      }),
+      useFactory: async (configService: ConfigService) => {
+        // const uri = configService.get<string>('MONGO_URI');
+        const uri = 'mongodb+srv://furiousnur_db_user:Cb7LmuP13cSA1Cum@cluster0.qhrbfil.mongodb.net/taskdb?retryWrites=true&w=majority';
+        console.log("uri: ", uri);
+        if (!uri) throw new Error('Mongo URI not found');
+        return { uri };
+      },
     }),
 
     AuthModule,

@@ -8,6 +8,7 @@ import { ContextService } from './common/services/context.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .setTitle('Task Management API')
@@ -19,7 +20,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
-  app.setGlobalPrefix('api');
   app.useGlobalFilters(new MongoExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
