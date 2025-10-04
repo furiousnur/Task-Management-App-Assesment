@@ -3,8 +3,6 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MongoExceptionFilter } from './common/filters/mongo-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
-import { UserContextInterceptor } from './common/interceptors/user-context.interceptor';
-import { ContextService } from './common/services/context.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
