@@ -26,7 +26,8 @@ import { JwtModule } from '@nestjs/jwt';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const uri = configService.get<string>('MONGO_URI');
+        // const uri = configService.get<string>('MONGO_URI');
+        const uri = 'mongodb+srv://furiousnur_db_user:Cb7LmuP13cSA1Cum@cluster0.qhrbfil.mongodb.net/taskdb?retryWrites=true&w=majority';
         if (!uri) throw new Error('Mongo URI not found');
         return { uri };
       },
